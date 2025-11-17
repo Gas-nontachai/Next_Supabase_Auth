@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Next.js + Supabase Mini Auth System
 
-## Getting Started
+โปรเจคตัวอย่างที่ใช้ Next.js 15 (App Router) + Supabase + shadcn/ui + Tailwind CSS 4 สำหรับสร้างระบบสมัครสมาชิก, ล็อกอิน, Dashboard และอัปโหลด Avatar พร้อมตั้งชื่อไฟล์ด้วย UUID เก็บใน Supabase Storage bucket `avatar_imgs`.
 
-First, run the development server:
+### คุณสมบัติหลัก
+- ✅ Signup page: สร้าง user ด้วย email/password และ insert ข้อมูลลงตาราง `profiles`
+- ✅ Login page: signInWithPassword แล้ว redirect ไป `/dashboard`
+- ✅ Dashboard: ดึงข้อมูล `supabase.auth.getUser()` + `profiles` แสดงผลด้วย shadcn/ui components
+- ✅ Upload Avatar: input type file + uuid file name + upload storage + getPublicUrl + update `profiles.avatar_url` + preview รูปใหม่ทันที
+- ✅ Logout button และ ThemeProvider รองรับ light/dark
 
+### เตรียม Environment
+1. สร้าง `.env.local` จากไฟล์ตัวอย่าง
+   ```bash
+   cp .env.example .env.local
+   ```
+2. ใส่ค่า
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+   ```
+3. ตรวจสอบว่า Supabase project มีตาราง `profiles` และ Storage bucket `avatar_imgs (public)` ตาม schema
+
+### การติดตั้งและรัน
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+เปิด http://localhost:3000 เพื่อเริ่มใช้งาน
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### โครงสร้างโฟลเดอร์สำคัญ
+- `src/app/signup` – หน้า Signup
+- `src/app/login` – หน้า Login
+- `src/app/dashboard` – Dashboard พร้อม Upload Avatar และ Logout
+- `src/components/ui/*` – shadcn/ui components (Card, Button, Input, Label, Avatar, Alert)
+- `src/components/UploadAvatar.tsx` – logic สำหรับอัปโหลด avatar UUID -> Supabase Storage
+- `src/lib/supabase.ts` – createBrowserClient อ่าน env จาก `NEXT_PUBLIC_SUPABASE_*`
+- `.env.example` – ตัวอย่าง environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+เพียงเชื่อมต่อ Supabase ก็ได้ Mini Auth System ที่พร้อมนำไปต่อยอด 🎉
